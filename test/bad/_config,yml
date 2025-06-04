@@ -1,0 +1,14 @@
+assets:
+  master:
+   - main.css
+   - main.js
+  presets:
+   - project:
+      - project.css
+      - project.js
+   - blog:
+      - blog.css
+  formats:
+   css: <link rel="stylesheet" href="%s">
+   js: <script src="%s"></script>
+   xyz: <asset> %s </asset>

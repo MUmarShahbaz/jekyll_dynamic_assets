@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require "bundler/gem_tasks"
-require "minitest/test_task"
-
-Minitest::TestTask.create
-
+require "rake/testtask"
 require "rubocop/rake_task"
 
-RuboCop::RakeTask.new
+Rake::TestTask.new(:test) do |t|
+  t.libs << "test"
+  t.test_files = FileList['test/test_*.rb']
+  t.verbose = true
+end
 
-task default: %i[test rubocop]
+RuboCop::RakeTask.new(:rubocop)
+
+task default: [:test, :rubocop]
