@@ -26,7 +26,6 @@ class JekyllDynamicAssetsTest < Minitest::Test
     page
   end
 
-
   def test_master_only
     page = build_and_load("master_only.html")
 
@@ -68,7 +67,7 @@ class JekyllDynamicAssetsTest < Minitest::Test
     assert_includes page.content, '<script src="main.js"></script>'
     assert_includes page.content, '<link rel="stylesheet" href="other.css">'
     assert_includes page.content, '<script src="other.js"></script>'
-    assert_includes page.content, '<asset> other.xyz </asset>'
+    assert_includes page.content, "<asset> other.xyz </asset>"
   end
 
   def test_missing_formats
@@ -76,22 +75,20 @@ class JekyllDynamicAssetsTest < Minitest::Test
 
     assert_includes page.content, '<link rel="stylesheet" href="main.css">'
     assert_includes page.content, '<script src="main.js"></script>'
-    assert_match /\bother\.miss\b/, page.content
+    assert_match(/\bother\.miss\b/, page.content)
   end
 
   def test_bad_preset
-    bad_source = File.expand_path("bad", __dir__)
     bad_config = Jekyll.configuration(
-      "source" => bad_source,
-      "destination" => "_bad_site",
+      "source" => File.expand_path("bad", __dir__),
+      "destination" => File.expand_path("_bad_site", __dir__),
       "quiet" => true
     )
     bad_site = Jekyll::Site.new(bad_config)
-
     error = assert_raises(RuntimeError) do
       bad_site.process
     end
 
-    assert_match(/DynamicAssets:.*No 'unga_bunga' preset defined/m, error.message)
+    assert_match(/^DynamicAssets: No preset\(s\) defined: .+ at: .+$/, error.message)
   end
 end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module JekyllDynamicAssets
+  # Asset link generator
   class Processor
     def initialize(site:, page:)
       @config = site.config["assets"] || {}
@@ -27,34 +28,40 @@ module JekyllDynamicAssets
     end
 
     def combined_assets
-      require 'set'
-
       # Container
       assets = []
 
       # Add master assets and manual assets
       assets.concat(Array(@config["master"]))
+      assets.concat(Array(preset_files))
       assets.concat(Array(@page_config["files"]))
 
-      # Handle presets selected by front matter
-      selected_presets = Set.new(Array(@page_config["presets"]))
-      all_presets = @config["presets"] || []
+      assets.uniq
+    end
 
-      all_presets.each do |preset|
-        preset.each do |name, files|
-          if selected_presets.include?(name)
-            assets.concat(Array(files))
-            selected_presets.delete(name)
-          end
+    def preset_files
+      preset_assets = []
+      bad_presets = []
+      selected_presets = Array(@page_config["presets"])
+      preset_map = @config["presets"] || {}
+      selected_presets.each do |preset|
+        if preset_map.key?(preset)
+          preset_assets.concat(Array(preset_map[preset]))
+        else
+          bad_presets << preset
         end
       end
+      remaining?(bad_presets)
+      preset_assets
+    end
 
+    def remaining?(remaining_presets)
       # Display the undefined presets
-      selected_presets.each do |missing|
-        raise "DynamicAssets: No '#{missing}' preset defined \n\t at: #{@page['path'] || @page['relative_path'] || 'unknown'}"
-      end
+      return if remaining_presets.empty?
 
-      assets.uniq
+      location = @page["path"] || @page["relative_path"] || "unknown"
+      missing_list = remaining_presets.to_a.join(", ")
+      raise "DynamicAssets: No preset(s) defined: #{missing_list} at: #{location}"
     end
   end
 end

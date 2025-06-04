@@ -3,11 +3,11 @@ assets:
    - main.css
    - main.js
   presets:
-   - project:
-      - project.css
-      - project.js
-   - blog:
-      - blog.css
+   project:
+   - project.css
+   - project.js
+   blog:
+   - blog.css
   formats:
    css: <link rel="stylesheet" href="%s">
    js: <script src="%s"></script>

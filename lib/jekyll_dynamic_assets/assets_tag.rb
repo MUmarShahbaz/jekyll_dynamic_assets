@@ -1,12 +1,10 @@
 # frozen_string_literal: true
+
 require "liquid"
 
 module JekyllDynamicAssets
+  # {% assets %} tag
   class AssetsTag < Liquid::Tag
-    def initialize(tag_name, markup, tokens)
-      super
-    end
-
     def render(context)
       site = context.registers[:site]
       page = context.registers[:page]
