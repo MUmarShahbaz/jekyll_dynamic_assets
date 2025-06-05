@@ -1,38 +1,78 @@
 # JekyllDynamicAssets
 
-TODO: Delete this and the text below, and describe your gem
+JekyllDynamicAssets is a Jekyll plugin that allows you to dynamically manage and inject CSS, JS and other assets into your site using presets, per-page configuration, and flexible formatting.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/jekyll_dynamic_assets`. To experiment with that code, run `bin/console` for an interactive prompt.
+## Features
+- Define global (master) assets and per-page assets
+- Use asset presets for reusable asset groups
+- Customizable HTML output for each asset type (CSS, JS, etc.)
+- Liquid tag `{% assets %}` for easy asset injection in templates and includes
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add this line to your application's Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
+```ruby
+source 'https://rubygems.org'
 
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+gem "jekyll"
+
+
+group :jekyll_plugins do
+  gem "jekyll_dynamic_assets"
+  # other gems
+end
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+Then add the following to your Jekyll site's `config.yml`:
 
-```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```yaml
+plugins:
+  - jekyll_dynamic_assets
 ```
 
 ## Usage
 
-TODO: Write usage instructions here
+1. **Configure your assets in `config.yml`:**
 
-## Development
+```yaml
+assets:
+  master:
+    - main.css
+    - main.js
+  formats:
+    css: "<link rel='stylesheet' href='%s'>"
+    js:  "<script src='%s'></script>"
+  presets:
+    blog: [blog.css, blog.js]
+    project: [project.css, project.js]
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+2. **Per-page or per-collection configuration:**
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+In your page or post front matter:
+
+```yaml
+assets:
+  files:
+    - custom.css
+  presets:
+    - blog
+```
+
+3. **Inject assets in your templates:**
+
+Use the Liquid tag where you want the assets to appear:
+
+```liquid
+{% assets %}
+```
+
+This will output the appropriate HTML tags for all configured assets. This tag should generally be used inside your `<head>` tag but can be used anywhere else.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/jekyll_dynamic_assets. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/jekyll_dynamic_assets/blob/main/CODE_OF_CONDUCT.md).
+Bug reports and pull requests are welcome on GitHub at https://github.com/MUmarShahbaz/jekyll_dynamic_assets. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/MUmarShahbaz/jekyll_dynamic_assets/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -40,4 +80,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the JekyllDynamicAssets project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/jekyll_dynamic_assets/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the JekyllDynamicAssets project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/MUmarShahbaz/jekyll_dynamic_assets/blob/main/CODE_OF_CONDUCT.md).
