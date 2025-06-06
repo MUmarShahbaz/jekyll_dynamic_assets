@@ -6,6 +6,7 @@ JekyllDynamicAssets is a Jekyll plugin that allows you to dynamically manage and
 - Define global (master) assets and per-page assets
 - Use asset presets for reusable asset groups
 - Pre-defined default formats for common assets, can be overwritten
+- Auto and Manual select formats
 - Liquid tag `{% assets %}` for easy asset injection in templates and includes
 - Error reporting for missing presets
 
@@ -46,13 +47,16 @@ assets:
   master: # Master assets
     - main.css
     - main.js
-  source: "/assets/" # Optional: base path for all assets
-  formats:
-    js:  "<script defer src='%s'></script>" # Overwrite defaults
-    xyz: "<custom> %s </custom>"  # Define Custom formats
+  source: "/assets/" # Optional: base path for all assets, skips assets starting with http
+  
   presets:  # Create presets to include multiple assets
     blog: [blog.css, blog.js]
     project: [project.css, project.js, code-highlight.css, slideshow.js, myApp.js]
+  
+  formats:
+    js:  <script defer src='%s'></script> # Overwrite defaults
+    xyz: <custom> %s </custom>  # Define Custom formats
+    screen-css: <link rel="stylesheet" href="%s" media="screen">
 ```
 
 2. **Per-page or per-collection configuration:**
@@ -63,6 +67,7 @@ In your page or post front matter:
 assets:
   files:
     - manual.css # include singular files
+    - onscreen.css::screen-css # Use :: to select a format, default format is determined by file extension
   presets:
     - blog  # Use a preset
 ```

@@ -24,3 +24,7 @@
   - ttf
   - otf
 - Added Source selection
+
+## [1.2.0] - 2025-06-06
+
+- Added option to select formats

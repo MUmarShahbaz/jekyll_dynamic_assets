@@ -13,8 +13,8 @@ module JekyllDynamicAssets
       all_assets = combined_assets
       asset_insertions = []
       all_assets.each do |asset|
-        extension = asset.split(".").last
-        asset_link = format_string(extension) % asset
+        link_format = asset.include?("::") ? asset.split("::").last : asset.split(".").last
+        asset_link = format_string(link_format) % asset.split("::").first
         asset_insertions << asset_link
       end
       asset_insertions
@@ -22,9 +22,9 @@ module JekyllDynamicAssets
 
     private
 
-    def format_string(extension)
+    def format_string(link_format)
       formats ||= formats_merge(DEFAULT_FORMATS, @config["formats"])
-      formats[extension] || "%s"
+      formats[link_format] || "%s"
     end
 
     def formats_merge(default, custom)

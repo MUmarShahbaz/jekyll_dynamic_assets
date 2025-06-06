@@ -109,4 +109,13 @@ class JekyllDynamicAssetsTest < Minitest::Test
     assert_includes page.content, '<link rel="stylesheet" href="assets/main.css">'
     assert_includes page.content, '<script src="assets/main.js"></script>'
   end
+
+  def test_select_format
+    page = build_and_load("select_format.html", @main_site)
+
+    assert_includes page.content, '<link rel="stylesheet" href="main.css">'
+    assert_includes page.content, '<script src="main.js"></script>'
+    refute_includes page.content, '<script src="other.js::deferjs"></script>'
+    assert_includes page.content, '<script defer src="other.js"></script>'
+  end
 end
