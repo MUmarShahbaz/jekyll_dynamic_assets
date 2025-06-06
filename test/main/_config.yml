@@ -9,6 +9,5 @@ assets:
    blog:
    - blog.css
   formats:
-   css: <link rel="stylesheet" href="%s">
-   js: <script src="%s"></script>
    xyz: <asset> %s </asset>
+   ttf: <custom> %s </custom>

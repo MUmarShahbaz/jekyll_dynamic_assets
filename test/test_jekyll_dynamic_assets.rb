@@ -78,6 +78,15 @@ class JekyllDynamicAssetsTest < Minitest::Test
     assert_match(/\bother\.miss\b/, page.content)
   end
 
+  def test_overwrite_formats
+    page = build_and_load("overwrite.html")
+
+    assert_includes page.content, '<link rel="stylesheet" href="main.css">'
+    assert_includes page.content, '<script src="main.js"></script>'
+    refute_includes page.content, '<link rel="preload" href="other.ttf" as="font" type="font/ttf" crossorigin>', "Format not overwritten"
+    assert_includes page.content, '<custom> overwrite.ttf </custom>'
+  end
+
   def test_bad_preset
     bad_config = Jekyll.configuration(
       "source" => File.expand_path("bad", __dir__),

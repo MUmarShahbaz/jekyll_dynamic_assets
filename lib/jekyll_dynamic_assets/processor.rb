@@ -23,15 +23,23 @@ module JekyllDynamicAssets
     private
 
     def format_string(extension)
-      formats = @config["formats"] || {}
+      formats ||= formats_merge(DEFAULT_FORMATS, @config["formats"])
       formats[extension] || "%s"
+    end
+
+    def formats_merge(default, custom)
+      custom.merge default do |_key, custom_setting, default_setting|
+        if not default_setting.respond_to? :merge
+          custom_setting
+        end
+      end
     end
 
     def combined_assets
       # Container
       assets = []
 
-      # Add master assets and manual assets
+      # Add assets
       assets.concat(Array(@config["master"]))
       assets.concat(Array(preset_files))
       assets.concat(Array(@page_config["files"]))
@@ -40,6 +48,7 @@ module JekyllDynamicAssets
     end
 
     def preset_files
+      # Collect assets from presets 
       preset_assets = []
       bad_presets = []
       selected_presets = Array(@page_config["presets"])
@@ -51,7 +60,7 @@ module JekyllDynamicAssets
           bad_presets << preset
         end
       end
-      remaining?(bad_presets)
+      remaining?(bad_presets) # Raise error for undefined errors
       preset_assets
     end
 
