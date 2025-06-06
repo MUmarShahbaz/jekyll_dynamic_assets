@@ -44,7 +44,14 @@ module JekyllDynamicAssets
       assets.concat(Array(preset_files))
       assets.concat(Array(@page_config["files"]))
 
-      assets.uniq
+      append_base(assets.uniq)
+    end
+
+    def append_base(assets)
+      base = @config["source"].to_s
+      base += "/" unless base.end_with?("/") || base.empty?
+
+      assets.map { |asset| asset.start_with?("http") ? asset : base + asset }
     end
 
     def preset_files

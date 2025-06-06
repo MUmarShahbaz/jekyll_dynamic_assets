@@ -100,4 +100,20 @@ class JekyllDynamicAssetsTest < Minitest::Test
 
     assert_match(/^DynamicAssets: No preset\(s\) defined: .+ at: .+$/, error.message)
   end
+
+  def test_base
+    base_config = Jekyll.configuration(
+      "source" => File.expand_path("base_check", __dir__),
+      "destination" => File.expand_path("_base_site", __dir__),
+      "quiet" => true
+    )
+    base_site = Jekyll::Site.new(base_config)
+    base_site.process
+    page = base_site.pages.find { |p| p.name == "base.html" }
+    refute_nil page, "base.html not found"
+    refute_includes page.content, "{% assets %}", "Tag not replaced at base.html"
+
+    assert_includes page.content, '<link rel="stylesheet" href="assets/main.css">'
+    assert_includes page.content, '<script src="assets/main.js"></script>'
+  end
 end
