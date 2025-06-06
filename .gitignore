@@ -6,5 +6,6 @@
 /pkg/
 /spec/reports/
 /tmp/
-/test/_main_site/
-/test/_bad_site/
+/test/_out1/
+/test/_out2/
+/test/_out3/

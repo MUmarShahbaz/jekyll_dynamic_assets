@@ -29,9 +29,7 @@ module JekyllDynamicAssets
 
     def formats_merge(default, custom)
       custom.merge default do |_key, custom_setting, default_setting|
-        if not default_setting.respond_to? :merge
-          custom_setting
-        end
+        custom_setting unless default_setting.respond_to? :merge
       end
     end
 
@@ -55,7 +53,7 @@ module JekyllDynamicAssets
     end
 
     def preset_files
-      # Collect assets from presets 
+      # Collect assets from presets
       preset_assets = []
       bad_presets = []
       selected_presets = Array(@page_config["presets"])
