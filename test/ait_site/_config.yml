@@ -11,4 +11,4 @@ assets:
   formats:
    xyz: <asset> %s </asset>
    ttf: <custom> %s </custom>
-   deferjs: <script defer src="%s"></script>
+   defer-js: <script defer src="%s"></script>

@@ -1,5 +1,5 @@
 assets:
-  source: assets/
+  source: /mySource
   master:
    - main.css
    - main.js
@@ -12,3 +12,5 @@ assets:
   formats:
    xyz: <asset> %s </asset>
    ttf: <custom> %s </custom>
+   defer-js: <script defer src="%s"></script>
+   crossorigin-css: <link rel="stylesheet" href="%s" crossorigin>

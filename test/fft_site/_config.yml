@@ -1,0 +1,14 @@
+assets:
+  master:
+   - main.css
+   - main.js
+  presets:
+   project:
+   - project.css
+   - project.js
+   blog:
+   - blog.css
+  formats:
+   xyz: <asset> %s </asset>
+   ttf: <custom> %s </custom>
+   defer-js: <script defer src="%s"></script>

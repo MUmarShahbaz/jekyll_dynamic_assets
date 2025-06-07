@@ -1,0 +1,16 @@
+---
+assets:
+  files:
+   - select<<selecting.css
+   - select<<selecting.css::crossorigin-css
+   - select<<selecting.css:::<link rel="preload" href="%s" as="style" onload="this.onload=null;this.rel='stylesheet'">
+   - /manual<<<manual-select.js
+   - /manual<<<manual-select.js::defer-js
+   - /manual<<<manual-select.css:::<noscript><link rel="stylesheet" href="%s"></noscript>
+   - https://myweb.com/<<<file.js
+   - https://myweb.com/<<<file.js::defer-js
+   - github<<github.css
+   - github<<github.css:::<noscript><link rel="stylesheet" href="%s"></noscript>
+---
+
+{% assets %}
