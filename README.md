@@ -1,14 +1,16 @@
 # JekyllDynamicAssets
 
-JekyllDynamicAssets is a Jekyll plugin that allows you to dynamically manage and inject CSS, JS, and other head assets into your site using presets, per-page configuration, and flexible formatting.
+JekyllDynamicAssets is a powerful Jekyll plugin for dynamic, flexible, and DRY asset management. It lets you define, group, and inject CSS, JS, and other head assets using presets, per-page config, and custom formatting.
 
 ## Features
 - Define global (master) assets and per-page assets
 - Use asset presets for reusable asset groups
-- Pre-defined default formats for common assets, can be overwritten
-- Auto and Manual select formats
+- Pre-defined and overrideable formats and sources for common assets
+- Auto, Select, and Inline formats and sources
 - Liquid tag `{% assets %}` for easy asset injection in templates and includes
-- Error reporting for missing presets
+- Error reporting for missing presets and formats
+- Absolute/relative URL support
+- Supports all head assets: CSS, JS, module JS, fonts, icons, JSON, etc.
 
 ## Installation
 
@@ -34,59 +36,96 @@ plugins:
 
 Finally, in your terminal run:
 
-```bash
+```powershell
 bundle install
 ```
 
 ## Usage
 
-1. **Configure your assets in `config.yml`:**
+### 1. Configure your assets in `config.yml`
 
 ```yaml
 assets:
-  master: # Master assets
+  master:
     - main.css
     - main.js
-  source: "/assets/" # Optional: base path for all assets, skips assets starting with http
-  
-  presets:  # Create presets to include multiple assets
+
+  source:
+    base: /assets
+    github: https://github.com/assets/
+    css: /css
+    js: /js
+  absolute: true # Use absolute URLs (uses `url` and `baseurl` from config)
+
+  presets:
     blog: [blog.css, blog.js]
     project: [project.css, project.js, code-highlight.css, slideshow.js, myApp.js]
-  
+
   formats:
-    js:  <script defer src='%s'></script> # Overwrite defaults
-    xyz: <custom> %s </custom>  # Define Custom formats
+    js:  <script defer src='%s'></script>
+    xyz: <custom> %s </custom>
     screen-css: <link rel="stylesheet" href="%s" media="screen">
 ```
 
-2. **Per-page or per-collection configuration:**
+If all your assets are in the same folder, you can simply do:
+
+```yaml
+assets:
+  source: /asset_folder
+```
+
+**Path rules:** Always use a leading slash, never a trailing slash.
+
+### 2. Per-page or per-collection configuration
 
 In your page or post front matter:
 
 ```yaml
 assets:
-  files:
-    - manual.css # include singular files
-    - onscreen.css::screen-css # Use :: to select a format, default format is determined by file extension
+  files:  # See Asset Definition Syntax below
+    - manual.css
+    - onscreen.css::screen-css
+    - no_script.css:::<noscript><link rel="stylesheet" href="%s"></noscript>
+    - github<<master.css
+    - /css/new<<<new-main.css
   presets:
-    - blog  # Use a preset
+    - blog
+    - project
 ```
 
-3. **Inject assets in your templates:**
+### 3. Inject assets in your templates
 
 Use the Liquid tag where you want the assets to appear (typically in your `<head>`):
 
 ```liquid
 <head>
   <!-- other tags like meta etc. -->
-
   {% assets %}
 </head>
 ```
 
 This will output the appropriate HTML tags for all configured assets. The tag should generally be used inside your `<head>` tag but can be used anywhere else.
 
-For assets which you haven't defined any format and there isn't any default for it either, the code will simply write the name of that asset.
+---
+
+### Asset Definition Syntax
+
+You can use the following syntax anywhere (config or front matter):
+
+```
+Source<<Asset::Format
+```
+
+- `<<` uses `Source` as a variable from config; `<<<` uses `Source` as a literal.
+- `::` uses `Format` as a variable from config; `:::` uses `Format` as a literal.
+- If either is not defined, source/format is taken from config using the file extension.
+- If the source is not external, it will be determined using `base + Source`.
+
+**NOTE:**
+- If JDA can't find a source, it will use the `base` without sub-directories.
+- If JDA can't find the format, it will raise an error. A format is required for each asset.
+
+---
 
 ## Contributing
 
