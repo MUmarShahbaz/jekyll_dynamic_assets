@@ -4,9 +4,9 @@ module JekyllDynamicAssets
   # Asset link generator
   class Processor
     def initialize(site:, page:)
-      @config = site.config["assets"] || {}
+      @config = site.config["dynamic_assets"] || {}
       @page = page
-      @page_config = page["assets"] || {}
+      @page_config = page["dynamic_assets"] || {}
       @path = @page["path"] || @page["relative_path"] || "unknown"
 
       sub_configs(site:)

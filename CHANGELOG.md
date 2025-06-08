@@ -45,3 +45,7 @@
   - otf   >> fonts
 - Updated Selection logic, added inline definition
 - Added Absolute URL
+
+## [1.3.1] - 2025-06-08
+
+- Resolved conflicts with `jekyll-assets`

@@ -3,7 +3,7 @@
 require "liquid"
 
 module JekyllDynamicAssets
-  # {% assets %} tag
+  # {% inject_assets %} tag
   class AssetsTag < Liquid::Tag
     def render(context)
       site = context.registers[:site]

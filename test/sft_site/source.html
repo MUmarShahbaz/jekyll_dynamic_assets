@@ -1,5 +1,5 @@
 ---
-assets:
+dynamic_assets:
   files:
    - select<<selecting.css
    - select<<selecting.css::crossorigin-css
@@ -13,4 +13,4 @@ assets:
    - github<<github.css:::<noscript><link rel="stylesheet" href="%s"></noscript>
 ---
 
-{% assets %}
+{% inject_assets %}

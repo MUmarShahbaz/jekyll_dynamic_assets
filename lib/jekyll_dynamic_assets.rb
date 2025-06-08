@@ -10,4 +10,4 @@ module JekyllDynamicAssets
   class Error < StandardError; end
 end
 
-Liquid::Template.register_tag("assets", JekyllDynamicAssets::AssetsTag)
+Liquid::Template.register_tag("inject_assets", JekyllDynamicAssets::AssetsTag)

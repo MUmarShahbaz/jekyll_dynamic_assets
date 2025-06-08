@@ -1,4 +1,4 @@
-assets:
+dynamic_assets:
   source:
     base: /mySource
     css: /css

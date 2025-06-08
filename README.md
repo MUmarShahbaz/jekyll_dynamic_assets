@@ -7,7 +7,7 @@ JekyllDynamicAssets is a powerful Jekyll plugin for dynamic, flexible, and DRY a
 - Use asset presets for reusable asset groups
 - Pre-defined and overrideable formats and sources for common assets
 - Auto, Select, and Inline formats and sources
-- Liquid tag `{% assets %}` for easy asset injection in templates and includes
+- Liquid tag `{% inject_assets %}` for easy asset injection in templates and includes
 - Error reporting for missing presets and formats
 - Absolute/relative URL support
 - Supports all head assets: CSS, JS, module JS, fonts, icons, JSON, etc.
@@ -45,7 +45,7 @@ bundle install
 ### 1. Configure your assets in `config.yml`
 
 ```yaml
-assets:
+dynamic_assets:
   master:
     - main.css
     - main.js
@@ -70,7 +70,7 @@ assets:
 If all your assets are in the same folder, you can simply do:
 
 ```yaml
-assets:
+dynamic_assets:
   source: /asset_folder
 ```
 
@@ -81,7 +81,7 @@ assets:
 In your page or post front matter:
 
 ```yaml
-assets:
+dynamic_assets:
   files:  # See Asset Definition Syntax below
     - manual.css
     - onscreen.css::screen-css
@@ -100,7 +100,7 @@ Use the Liquid tag where you want the assets to appear (typically in your `<head
 ```liquid
 <head>
   <!-- other tags like meta etc. -->
-  {% assets %}
+  {% inject_assets %}
 </head>
 ```
 

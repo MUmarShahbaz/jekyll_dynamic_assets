@@ -1,4 +1,4 @@
-assets:
+dynamic_assets:
   master:
    - main.css
    - main.js

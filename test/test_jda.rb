@@ -33,7 +33,7 @@ class JekyllDynamicAssetsTest < Minitest::Test
     site.process
     page = site.pages.find { |p| p.name == name }
     refute_nil page, "#{name} not found in #{site}"
-    refute_includes page.content, "{% assets %}", "Tag not replaced at #{name} of #{site}"
+    refute_includes page.content, "{% inject_assets %}", "Tag not replaced at #{name} of #{site}"
     page
   end
 

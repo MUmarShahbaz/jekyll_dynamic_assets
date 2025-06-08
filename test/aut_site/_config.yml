@@ -1,7 +1,7 @@
 url: https://mywebsite
 baseurl: /sub
 
-assets:
+dynamic_assets:
   absolute: true
   source:
     base: /mySource
