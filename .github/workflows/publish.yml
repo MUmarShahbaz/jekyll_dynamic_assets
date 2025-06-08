@@ -1,0 +1,97 @@
+name: Publish
+
+on:
+  push:
+    tags:
+        - 'v*'
+
+jobs:
+  Rake:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby-version: [3.2, 3.3, 3.4]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby-version }}
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+
+      - name: Test
+        run: bundle exec rake test
+      
+      - name: Rubocop
+        run: bundle exec rake rubocop
+
+  Package:
+    runs-on: ubuntu-latest
+    needs: Rake
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: bundle install
+        
+      - name: Pack gem
+        run: gem build jekyll_dynamic_assets.gemspec
+      
+      - name: Upload to GitHub Packages
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          gem push --key github --host https://rubygems.pkg.github.com/MUmarShahbaz jekyll_dynamic_assets-${VERSION}.gem
+        env:
+          GEM_HOST_API_KEY: ${{ secrets.PUBLISH_KEY }}
+
+  Release:
+    runs-on: ubuntu-latest
+    needs: Package
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }}
+
+      - name: Extract changelog and add to summary
+        id: extract_changelog
+        run: |
+          TAG=${GITHUB_REF#refs/tags/v}
+
+          RELEASE_NOTES=$(sed -n "/^## \[$TAG\]/,/^## /{p}" CHANGELOG.md | sed '$d')
+          echo "Release Notes:"
+          echo "-------------------------------------------------------"
+          printf '%s\n' "$RELEASE_NOTES"
+          echo "-------------------------------------------------------"
+
+          DELIMITER="EOF_$(openssl rand -hex 6)"
+          echo "release_notes<<$DELIMITER" >> $GITHUB_OUTPUT
+          echo "$RELEASE_NOTES" >> $GITHUB_OUTPUT
+          echo "$DELIMITER" >> $GITHUB_OUTPUT
+
+          echo "$RELEASE_NOTES" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          body: ${{ steps.extract_changelog.outputs.release_notes }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,33 +1,8 @@
-## [Unreleased]
+# [Released]
 
-## [0.1.0] - 2025-06-05
+## [1.3.1] - 2025-06-08
 
-- Test release
-
-## [Released]
-
-## [1.0.0] - 2025-06-05
-
-- Initial release
-
-## [1.1.0] - 2025-06-06
-
-- Added Default Formats for the following:
-  - css
-  - js
-  - mjs
-  - ts
-  - json
-  - ico
-  - woff
-  - woff2
-  - ttf
-  - otf
-- Added Source selection
-
-## [1.2.0] - 2025-06-06
-
-- Added option to select formats
+- Resolved conflicts with `jekyll-assets`
 
 ## [1.3.0] - 2025-06-07
 
@@ -46,6 +21,31 @@
 - Updated Selection logic, added inline definition
 - Added Absolute URL
 
-## [1.3.1] - 2025-06-08
+## [1.2.0] - 2025-06-06
 
-- Resolved conflicts with `jekyll-assets`
+- Added option to select formats
+
+## [1.1.0] - 2025-06-06
+
+- Added Default Formats for the following:
+  - css
+  - js
+  - mjs
+  - ts
+  - json
+  - ico
+  - woff
+  - woff2
+  - ttf
+  - otf
+- Added Source selection
+
+## [1.0.0] - 2025-06-05
+
+- Initial release
+
+# [Unreleased]
+
+## [0.1.0] - 2025-06-05
+
+- Test release
