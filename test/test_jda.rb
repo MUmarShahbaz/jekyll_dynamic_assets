@@ -10,6 +10,10 @@ class JekyllDynamicAssetsTest < Minitest::Test
     FileUtils.rm_rf("_out1")
     FileUtils.rm_rf("_out2")
     FileUtils.rm_rf("_out3")
+    FileUtils.rm_rf("_out4")
+    FileUtils.rm_rf("_out5")
+    FileUtils.rm_rf("_out6")
+    FileUtils.rm_rf("_out7")
 
     # Create Jekyll sites
     @ait_site = new_site("ait_site", "_out1") # Asset Injection Test
@@ -18,6 +22,7 @@ class JekyllDynamicAssetsTest < Minitest::Test
     @sft_site = new_site("sft_site", "_out4") # Source Formatting Test
     @aut_site = new_site("aut_site", "_out5") # Absolute URL Test
     @sst_site = new_site("sst_site", "_out6") # String Source Test
+    @ebt_site = new_site("ebt_site", "_out7") # External Base Test
   end
 
   def new_site(source, out)
@@ -162,5 +167,13 @@ class JekyllDynamicAssetsTest < Minitest::Test
 
     assert_includes page.content, '<link rel="stylesheet" href="/mySource/main.css">'
     assert_includes page.content, '<script src="/mySource/main.js"></script>'
+  end
+
+  # External Base Test
+  def test_external_base
+    page = build_and_load("external_base.html", @ebt_site)
+
+    assert_includes page.content, '<link rel="stylesheet" href="https://myCDN.com/mySource/css/main.css">'
+    assert_includes page.content, '<script src="https://myCDN.com/mySource/js/main.js"></script>'
   end
 end
