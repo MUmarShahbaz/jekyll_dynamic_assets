@@ -59,7 +59,7 @@ module JekyllDynamicAssets
 
     def prepare_dir(dir)
       # Format URL assuming standard inputs, all leading slashes and no trailing
-      directory = @config["absolute"] ? @url : ""
+      directory = @config["absolute"] && !@asset_sources["base"].start_with?("http") ? @url : ""
       directory += @asset_sources["base"] unless @asset_sources["base"] == ""
       directory += dir unless dir.empty? || dir == ""
       directory += "/"
